@@ -1,16 +1,22 @@
 git-notify
 ========
 
+Originally forked from [jakeonrails / git-notify](https://github.com/jakeonrails/git-notify).
+
 This little bash script will watch your origin/master for updates every 60 seconds and uses notify-send to alert you of new commits.
-
-I asked [this question](http://stackoverflow.com/questions/5082001/is-there-a-tool-to-watch-a-remote-git-repository-on-ubuntu-and-do-popup-notificat) on StackOverflow to find out if there was a tool to notify me of commits to remote git repositories, and the answer came back no!
-
-Thus, git-notify was born!
 
 Usage:
 ----------
 
-    ~/code/some-git-repository $ git-notify &
+Save it under the following directory to use it as a command: 
+    /usr/local/bin
+
+then,
+
+    $ git-notify ~/code/some-git-repository origin/master &
+
+or a is the same,
+    $ git-notify [project_folder_path] [branch_to_monitor] &
 
 The ampersand (&) at the end tells your terminal to launch it in the background. If you want to kill it later, you can do:
 
@@ -30,4 +36,4 @@ Installation:
 Just download git-notify and put it somewhere in your path.
 
 Jake Moffatt, jakeonrails@gmail.com
-
+Carlos Betancourt, carbetacar@gmail.com
