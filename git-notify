@@ -6,15 +6,27 @@ format_when="--format=%cr"
 format_summary="--format=%s"
 format_body="--format=%b"
 
-# what repository do we want to watch.
-repository="origin/master"
+# What repo
+if [ $1 ]; then 
+  repo="$1/.git"
+else
+  repo=""
+fi
+
+# what branch do we want to watch.
+if [ $2 ]; then 
+  branch=$2
+else
+  branch="origin/master"
+fi
+
 latest_revision="none"
 
 # loop forever, need to kill the process.
 while [ 1 ]; do
 
     # get the latest revision SHA.
-    current_revision=`git rev-parse $repository`
+    current_revision=`git --git-dir=$repo rev-parse $branch`
 
     # if we haven't seen that one yet, then we know there's new stuff.
     if [ $latest_revision != $current_revision ]; then
@@ -23,17 +35,18 @@ while [ 1 ]; do
         latest_revision=$current_revision
 
         # extract the details from the log.
-        commit_name=`git log -1 $format_name $latest_revision`
-        commit_when=`git log -1 $format_when $latest_revision`
-        commit_summary=`git log -1 $format_summary $latest_revision`
-        commit_body=`git log -1 $format_body $latest_revision`
+        commit_name=`git --git-dir=$repo log -1 $format_name $latest_revision`
+        commit_when=`git --git-dir=$repo log -1 $format_when $latest_revision`
+        commit_summary=`git --git-dir=$repo log -1 $format_summary $latest_revision`
+        commit_body=`git --git-dir=$repo log -1 $format_body $latest_revision`
 
         # notify the user of the commit.
-        summary="$commit_name committed to $repository $commit_when!"
+        summary="$commit_name committed a $branch $commit_when!"
         body="$commit_summary\n\n$commit_body"
-        `notify-send "$summary" "$body"`
-
+#       `notify-send "$summary" "\n$body" -i "$icon"
+        `notify-send "$summary" "\n$body"`
     fi
+
     sleep 60
 done
 
